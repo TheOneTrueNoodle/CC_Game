@@ -16,9 +16,16 @@ namespace player
         public new Rigidbody rigidbody;
         public GameObject normalCamera;
 
+        private bool grounded;
+        public Transform groundCheck;
+        private float groundDistance = 0.4f;
+        public LayerMask groundMask;
+
         [Header("Stats")]
         [SerializeField] private float movementSpeed = 5;
         [SerializeField] private float rotationSpeed = 10;
+        [SerializeField] private float jumpHeight = 5;
+
 
         private void Start()
         {
@@ -36,10 +43,16 @@ namespace player
 
             inputHandler.TickInput(delta);
 
+            grounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+
+            if (inputHandler.JumpInput(delta))
+            {
+                Jump();
+            }
             moveDirection = cameraObject.forward * inputHandler.vertical;
             moveDirection += cameraObject.right * inputHandler.horizontal;
             moveDirection.Normalize();
-            moveDirection.y = 0;
+            if (grounded) { moveDirection.y = 0; }
 
             float speed = movementSpeed;
             moveDirection *= speed;
@@ -81,6 +94,20 @@ namespace player
             Quaternion targetRotation = Quaternion.Slerp(myTransform.rotation, tr, rs * delta);
 
             myTransform.rotation = targetRotation;
+        }
+
+        #endregion
+
+        #region Jump
+
+        private void Jump()
+        {
+            if (grounded == true)
+            {
+                grounded = false;
+                Debug.Log("Jump Successful");
+                rigidbody.AddForce(transform.up * jumpHeight);
+            }
         }
 
         #endregion

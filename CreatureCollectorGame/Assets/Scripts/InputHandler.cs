@@ -19,6 +19,8 @@ namespace player
         private Vector2 movementInput;
         private Vector2 cameraInput;
 
+        private bool jumpTrigger;
+
         private void Awake()
         {
             cameraHandler = CameraHandler.singleton;
@@ -42,6 +44,7 @@ namespace player
                 inputActions = new PlayerControls();
                 inputActions.PlayerMovement.Movement.performed += inputActions => movementInput = inputActions.ReadValue<Vector2>();
                 inputActions.PlayerMovement.Camera.performed += i => cameraInput = i.ReadValue<Vector2>();
+                inputActions.PlayerMovement.Jump.performed += _ => jumpTrigger = true;
             }
 
             inputActions.Enable();
@@ -64,6 +67,16 @@ namespace player
             moveAmount = Mathf.Clamp01(Mathf.Abs(horizontal) + Mathf.Abs(vertical));
             mouseX = cameraInput.x;
             mouseY = cameraInput.y;
+        }
+
+        public bool JumpInput(float delta)
+        {
+            if(jumpTrigger == true)
+            {
+                jumpTrigger = false;
+                return true;
+            }
+            return false;
         }
     }
 }
