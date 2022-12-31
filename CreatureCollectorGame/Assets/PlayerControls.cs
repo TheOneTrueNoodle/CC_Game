@@ -156,6 +156,45 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Player Combat Actions"",
+            ""id"": ""20c3f3e9-f5a7-4528-bcac-346b610539dd"",
+            ""actions"": [
+                {
+                    ""name"": ""Dodge"",
+                    ""type"": ""Button"",
+                    ""id"": ""477a74c4-71f3-40dd-b231-26eb3151f9b7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""27ea3b47-ff88-4965-acb1-9e1a6e5b7c97"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c66c688b-f812-4727-8e2c-53e17e282a83"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -165,6 +204,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_PlayerMovement_Movement = m_PlayerMovement.FindAction("Movement", throwIfNotFound: true);
         m_PlayerMovement_Camera = m_PlayerMovement.FindAction("Camera", throwIfNotFound: true);
         m_PlayerMovement_Jump = m_PlayerMovement.FindAction("Jump", throwIfNotFound: true);
+        // Player Combat Actions
+        m_PlayerCombatActions = asset.FindActionMap("Player Combat Actions", throwIfNotFound: true);
+        m_PlayerCombatActions_Dodge = m_PlayerCombatActions.FindAction("Dodge", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -269,10 +311,47 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         }
     }
     public PlayerMovementActions @PlayerMovement => new PlayerMovementActions(this);
+
+    // Player Combat Actions
+    private readonly InputActionMap m_PlayerCombatActions;
+    private IPlayerCombatActionsActions m_PlayerCombatActionsActionsCallbackInterface;
+    private readonly InputAction m_PlayerCombatActions_Dodge;
+    public struct PlayerCombatActionsActions
+    {
+        private @PlayerControls m_Wrapper;
+        public PlayerCombatActionsActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Dodge => m_Wrapper.m_PlayerCombatActions_Dodge;
+        public InputActionMap Get() { return m_Wrapper.m_PlayerCombatActions; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PlayerCombatActionsActions set) { return set.Get(); }
+        public void SetCallbacks(IPlayerCombatActionsActions instance)
+        {
+            if (m_Wrapper.m_PlayerCombatActionsActionsCallbackInterface != null)
+            {
+                @Dodge.started -= m_Wrapper.m_PlayerCombatActionsActionsCallbackInterface.OnDodge;
+                @Dodge.performed -= m_Wrapper.m_PlayerCombatActionsActionsCallbackInterface.OnDodge;
+                @Dodge.canceled -= m_Wrapper.m_PlayerCombatActionsActionsCallbackInterface.OnDodge;
+            }
+            m_Wrapper.m_PlayerCombatActionsActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Dodge.started += instance.OnDodge;
+                @Dodge.performed += instance.OnDodge;
+                @Dodge.canceled += instance.OnDodge;
+            }
+        }
+    }
+    public PlayerCombatActionsActions @PlayerCombatActions => new PlayerCombatActionsActions(this);
     public interface IPlayerMovementActions
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnCamera(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+    }
+    public interface IPlayerCombatActionsActions
+    {
+        void OnDodge(InputAction.CallbackContext context);
     }
 }

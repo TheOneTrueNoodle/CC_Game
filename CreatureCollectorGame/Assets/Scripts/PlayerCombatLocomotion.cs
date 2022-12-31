@@ -16,9 +16,19 @@ namespace player
         public new Rigidbody rigidbody;
         public GameObject normalCamera;
 
+        private bool grounded;
+        public Transform groundCheck;
+        private float groundDistance = 0.4f;
+        public LayerMask groundMask;
+
+        public bool dodging;
+        private Vector3 dodgeDir;
+
         [Header("Stats")]
-        [SerializeField] private float movementSpeed = 8;
+        [SerializeField] private float movementSpeed = 5;
+        [SerializeField] public float dodgeSpeed = 10;
         [SerializeField] private float rotationSpeed = 10;
+        [SerializeField] private float jumpHeight = 5;
 
         private void Start()
         {
@@ -35,30 +45,23 @@ namespace player
             float delta = Time.deltaTime;
 
             inputHandler.TickInput(delta);
+            if (dodging != true) { HandleMovement(delta); }
+            else { DodgeMovement(dodgeDir, delta); }
+            HandleDodge(delta);
 
-            moveDirection = cameraObject.forward * inputHandler.vertical;
-            moveDirection += cameraObject.right * inputHandler.horizontal;
-            moveDirection.Normalize();
-            moveDirection.y = 0;
+            grounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-            float speed = movementSpeed;
-            moveDirection *= speed;
-
-            Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, normalVector);
-            rigidbody.velocity = projectedVelocity;
-
-            animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0);
-
-            if (animatorHandler.canRotate)
+            if (inputHandler.JumpInput(delta))
             {
-                HandleRotation(delta);
+                Jump();
             }
         }
 
         #region Movement
 
-        private Vector3 normalVector;
+        public Vector3 normalVector;
         private Vector3 targetPosition;
+
         private void HandleRotation(float delta)
         {
             Vector3 targetDirection = Vector3.zero;
@@ -81,6 +84,98 @@ namespace player
             Quaternion targetRotation = Quaternion.Slerp(myTransform.rotation, tr, rs * delta);
 
             myTransform.rotation = targetRotation;
+        }
+
+        public void HandleMovement(float delta)
+        {
+            moveDirection = cameraObject.forward * inputHandler.vertical;
+            moveDirection += cameraObject.right * inputHandler.horizontal;
+            moveDirection.Normalize();
+            if (grounded) { moveDirection.y = 0; }
+
+            float speed = movementSpeed;
+            moveDirection *= speed;
+            
+            Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, normalVector);
+            rigidbody.velocity = projectedVelocity;
+
+            animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0);
+
+            if (animatorHandler.canRotate)
+            {
+                HandleRotation(delta);
+            }
+        }
+
+        public void HandleDodge(float delta)
+        {
+            if (animatorHandler.anim.GetBool("isInteracting"))
+                return;
+
+            if(inputHandler.dodgeFlag)
+            {
+                moveDirection = cameraObject.forward * inputHandler.vertical;
+                moveDirection += cameraObject.right * inputHandler.horizontal;
+                moveDirection.Normalize();
+                moveDirection.y = 0;
+
+                if (inputHandler.moveAmount > 0)
+                {
+                    DodgeMovement dm = animatorHandler.anim.GetBehaviour<DodgeMovement>();
+                    if(dm.playerCombatLocomotion == null) { dm.playerCombatLocomotion = this; }
+                    //dm.dir = moveDirection;
+
+                    animatorHandler.PlayTargetAnimation("Dodge", true);
+                    Quaternion dodgeRotation = Quaternion.LookRotation(moveDirection);
+                    myTransform.rotation = dodgeRotation;
+                    dodgeDir = moveDirection;
+                }
+                else
+                {
+                    BackstepMovement bm = animatorHandler.anim.GetBehaviour<BackstepMovement>();
+                    if (bm.playerCombatLocomotion == null) { bm.playerCombatLocomotion = this; }
+                    //bm.dir = myTransform.forward; 
+
+                    animatorHandler.PlayTargetAnimation("Backstep", true);
+                    dodgeDir = -myTransform.forward;
+                }
+            }
+        }
+
+        public void DodgeMovement(Vector3 dir, float delta)
+        {
+            dir.Normalize();
+            Debug.Log(dir);
+
+            float speed = dodgeSpeed;
+            dir *= speed;
+
+
+            Vector3 projectedVelocity = Vector3.ProjectOnPlane(dir, normalVector);
+
+            Debug.Log(projectedVelocity);
+            Debug.Log(Vector3.back);
+            rigidbody.velocity = Vector3.zero;
+            rigidbody.velocity = projectedVelocity;
+        }
+
+        public void HandleSprinting(float delta)
+        {
+
+        }
+
+        #endregion
+
+        #region Jump
+
+        private void Jump()
+        {
+            if (grounded == true)
+            {
+                grounded = false;
+                Debug.Log("Jump Successful");
+                rigidbody.AddForce(transform.up * jumpHeight);
+            }
         }
 
         #endregion

@@ -13,8 +13,12 @@ namespace player
         public float mouseX;
         public float mouseY;
 
+        public bool b_Input;
+        public bool dodgeFlag;
+        public bool isInteracting;
+
         private PlayerControls inputActions;
-        private CameraHandler cameraHandler;
+        public CameraHandler cameraHandler;
 
         private Vector2 movementInput;
         private Vector2 cameraInput;
@@ -58,6 +62,7 @@ namespace player
         public void TickInput(float delta)
         {
             MoveInput(delta);
+            HandleDodgeInput(delta);
         }
 
         private void MoveInput(float delta)
@@ -77,6 +82,16 @@ namespace player
                 return true;
             }
             return false;
+        }
+
+        private void HandleDodgeInput(float delta)
+        {
+            b_Input = inputActions.PlayerCombatActions.Dodge.phase == UnityEngine.InputSystem.InputActionPhase.Performed;
+
+            if (b_Input)
+            {
+                dodgeFlag = true;
+            }
         }
     }
 }
