@@ -105,6 +105,7 @@ namespace player
 
             float delta = Time.deltaTime;
 
+            /*
             if(playerLocomotion == null)
             {
                 playerCombatLocomotion.rigidbody.drag = 0;
@@ -125,7 +126,7 @@ namespace player
             else
             {
                 playerLocomotion.rigidbody.velocity = velocity;
-            }
+            }*/
         }
     }
 }

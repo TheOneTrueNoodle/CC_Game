@@ -25,7 +25,7 @@ namespace player
 
         private bool jumpTrigger;
 
-        private void Awake()
+        private void Start()
         {
             cameraHandler = CameraHandler.singleton;
         }
