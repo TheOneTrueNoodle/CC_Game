@@ -14,9 +14,26 @@ namespace player
         public float mouseY;
 
         private PlayerControls inputActions;
+        private CameraHandler cameraHandler;
 
         private Vector2 movementInput;
         private Vector2 cameraInput;
+
+        private void Awake()
+        {
+            cameraHandler = CameraHandler.singleton;
+        }
+
+        private void FixedUpdate()
+        {
+            float delta = Time.fixedDeltaTime;
+
+            if(cameraHandler != null)
+            {
+                cameraHandler.followTarget(delta);
+                cameraHandler.HandleCameraRotation(delta, mouseX, mouseY);
+            }
+        }
 
         public void OnEnable()
         {
