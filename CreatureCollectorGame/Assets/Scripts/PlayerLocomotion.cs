@@ -24,9 +24,12 @@ namespace player
         public bool dodging;
         private Vector3 dodgeDir;
 
+        public bool isSprinting;
+
         [Header("Stats")]
         [SerializeField] private float movementSpeed = 5;
-        [SerializeField] public float dodgeSpeed = 10;
+        [SerializeField] private float sprintSpeed = 7.5f;
+        [SerializeField] public float dodgeSpeed = 16;
         [SerializeField] private float rotationSpeed = 10;
         [SerializeField] private float jumpHeight = 5;
 
@@ -44,17 +47,11 @@ namespace player
         {
             float delta = Time.deltaTime;
 
+            isSprinting = inputHandler.sprintFlag;
             inputHandler.TickInput(delta);
-            if (dodging != true) { HandleMovement(delta); }
-            else { DodgeMovement(dodgeDir, delta); }
+            HandleMovement(delta);
+            DodgeMovement(dodgeDir, delta);
             HandleDodge(delta);
-
-            grounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-
-            if (inputHandler.JumpInput(delta))
-            {
-                Jump();
-            }
         }
 
         #region Movement
@@ -88,18 +85,31 @@ namespace player
 
         public void HandleMovement(float delta)
         {
+            if (inputHandler.isInteracting)
+                return;
+
             moveDirection = cameraObject.forward * inputHandler.vertical;
             moveDirection += cameraObject.right * inputHandler.horizontal;
             moveDirection.Normalize();
             moveDirection.y = 0;
 
             float speed = movementSpeed;
-            moveDirection *= speed;
+
+            if(inputHandler.sprintFlag)
+            {
+                speed = sprintSpeed;
+                isSprinting = true;
+                moveDirection *= speed;
+            }
+            else
+            {
+                moveDirection *= speed;
+            }
 
             Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, normalVector);
             rigidbody.velocity = projectedVelocity;
 
-            animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0);
+            animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, isSprinting);
 
             if (animatorHandler.canRotate)
             {
@@ -144,6 +154,9 @@ namespace player
 
         public void DodgeMovement(Vector3 dir, float delta)
         {
+            if (dodging != true)
+                return;
+
             dir.Normalize();
             Debug.Log(dir);
 

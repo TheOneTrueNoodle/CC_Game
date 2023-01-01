@@ -15,8 +15,9 @@ namespace player
         public float mouseX;
         public float mouseY;
 
-        public bool b_Input;
         public bool dodgeFlag;
+        public bool sprintFlag;
+        public bool jumpFlag;
         public bool isInteracting;
 
         private PlayerControls inputActions;
@@ -65,6 +66,7 @@ namespace player
         {
             MoveInput(delta);
             if (inCombat) { HandleDodgeInput(delta); }
+            HandleSprintInput(delta);
         }
 
         private void MoveInput(float delta)
@@ -88,12 +90,12 @@ namespace player
 
         private void HandleDodgeInput(float delta)
         {
-            b_Input = inputActions.PlayerCombatActions.Dodge.phase == UnityEngine.InputSystem.InputActionPhase.Performed;
+            dodgeFlag = inputActions.PlayerCombatActions.Dodge.phase == UnityEngine.InputSystem.InputActionPhase.Performed;
+        }
 
-            if (b_Input)
-            {
-                dodgeFlag = true;
-            }
+        private void HandleSprintInput(float delta)
+        {
+            sprintFlag = inputActions.PlayerMovement.Sprint.phase == UnityEngine.InputSystem.InputActionPhase.Performed;
         }
     }
 }

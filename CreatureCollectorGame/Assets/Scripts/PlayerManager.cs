@@ -19,6 +19,7 @@ namespace player
         {
             inputHandler.isInteracting = anim.GetBool("isInteracting");
             inputHandler.dodgeFlag = false;
+            inputHandler.sprintFlag = false;
         }
     }
 }
