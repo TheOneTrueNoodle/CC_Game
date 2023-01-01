@@ -33,6 +33,7 @@ namespace player
         [SerializeField] public float dodgeSpeed = 16;
         [SerializeField] private float rotationSpeed = 10;
         [SerializeField] private float fallingSpeed = 45;
+        [SerializeField] private float jumpPower = 60;
 
         private void Start()
         {
@@ -113,7 +114,7 @@ namespace player
 
         public void HandleDodge(float delta)
         {
-            if (animatorHandler.anim.GetBool("isInteracting"))
+            if (playerManager.isInteracting)
                 return;
 
             if (inputHandler.dodgeFlag)
@@ -166,8 +167,37 @@ namespace player
             rigidbody.velocity = projectedVelocity;
         }
 
+        public void HandleJumping(float delta)
+        {
+            if (playerManager.isInteracting)
+                return;
+
+            if(inputHandler.jumpFlag && playerManager.isGrounded)
+            {
+                playerManager.isGrounded = false;
+                playerManager.isInAir = true;
+
+                moveDirection = cameraObject.forward * inputHandler.vertical;
+                moveDirection += cameraObject.right * inputHandler.horizontal;
+                moveDirection.Normalize();
+                moveDirection.y = 0;
+
+                animatorHandler.PlayTargetAnimation("Jump", true);
+                animatorHandler.anim.SetBool("isJumping", true);
+
+                float speed = movementSpeed;
+                if (playerManager.isSprinting) { speed = sprintSpeed; }
+
+                rigidbody.AddForce(Vector3.up * jumpPower);
+                rigidbody.AddForce(moveDirection * speed);
+            }
+        }
+
         public void HandleFalling(float delta, Vector3 moveDirection)
         {
+            if (playerManager.isJumping)
+                return;
+
             playerManager.isGrounded = false;
             RaycastHit hit;
             Vector3 origin = myTransform.position;
@@ -248,6 +278,7 @@ namespace player
                 }
             }
         }
+
 
         #endregion
 

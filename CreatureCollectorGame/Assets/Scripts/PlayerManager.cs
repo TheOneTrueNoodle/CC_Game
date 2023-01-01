@@ -17,6 +17,7 @@ namespace player
         public bool isSprinting;
         public bool isGrounded;
         public bool isInAir;
+        public bool isJumping;
 
         private void Start()
         {
@@ -32,12 +33,14 @@ namespace player
 
             //Input Handler
             isInteracting = anim.GetBool("isInteracting");
+            isJumping = anim.GetBool("isJumping");
 
             //Player Locomotion
             inputHandler.TickInput(delta);
             playerLocomotion.HandleMovement(delta);
             playerLocomotion.DodgeMovement(playerLocomotion.dodgeDir, delta);
             playerLocomotion.HandleDodge(delta);
+            playerLocomotion.HandleJumping(delta);
             playerLocomotion.HandleFalling(delta, playerLocomotion.moveDirection);
         }
 
@@ -57,6 +60,8 @@ namespace player
             isSprinting = inputHandler.sprintFlag;
             inputHandler.dodgeFlag = false;
             inputHandler.sprintFlag = false;
+            inputHandler.jumpFlag = false;
+            
 
             if(isInAir)
             {

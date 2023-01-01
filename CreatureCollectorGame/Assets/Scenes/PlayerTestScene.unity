@@ -673,6 +673,7 @@ MonoBehaviour:
   dodgeSpeed: 16
   rotationSpeed: 10
   fallingSpeed: 25
+  jumpPower: 200
   normalVector: {x: 0, y: 0, z: 0}
 --- !u!114 &1922733781
 MonoBehaviour:
@@ -711,6 +712,7 @@ MonoBehaviour:
   isSprinting: 0
   isGrounded: 0
   isInAir: 0
+  isJumping: 0
 --- !u!1 &2055649812
 GameObject:
   m_ObjectHideFlags: 0

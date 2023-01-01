@@ -33,7 +33,6 @@ namespace player
                 inputActions = new PlayerControls();
                 inputActions.PlayerMovement.Movement.performed += inputActions => movementInput = inputActions.ReadValue<Vector2>();
                 inputActions.PlayerMovement.Camera.performed += i => cameraInput = i.ReadValue<Vector2>();
-                inputActions.PlayerMovement.Jump.performed += _ => jumpTrigger = true;
             }
 
             inputActions.Enable();
@@ -49,6 +48,7 @@ namespace player
             MoveInput(delta);
             HandleDodgeInput(delta);
             HandleSprintInput(delta);
+            HandleJumpInput(delta);
         }
 
         private void MoveInput(float delta)
@@ -84,6 +84,14 @@ namespace player
                 return;
 
             sprintFlag = inputActions.PlayerMovement.Sprint.phase == UnityEngine.InputSystem.InputActionPhase.Performed;
+        }
+
+        private void HandleJumpInput(float delta)
+        {
+            if (inCombat)
+                return;
+
+            jumpFlag = inputActions.PlayerMovement.Jump.phase == UnityEngine.InputSystem.InputActionPhase.Performed;
         }
     }
 }
