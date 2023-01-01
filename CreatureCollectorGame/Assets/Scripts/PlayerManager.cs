@@ -15,6 +15,9 @@ namespace player
 
         [Header("Player Flags")]
         public bool isSprinting;
+        public bool isGrounded;
+        public bool isInAir;
+
         private void Start()
         {
             inputHandler = GetComponent<InputHandler>();
@@ -35,6 +38,7 @@ namespace player
             playerLocomotion.HandleMovement(delta);
             playerLocomotion.DodgeMovement(playerLocomotion.dodgeDir, delta);
             playerLocomotion.HandleDodge(delta);
+            playerLocomotion.HandleFalling(delta, playerLocomotion.moveDirection);
         }
 
         private void FixedUpdate()
@@ -53,6 +57,11 @@ namespace player
             isSprinting = inputHandler.sprintFlag;
             inputHandler.dodgeFlag = false;
             inputHandler.sprintFlag = false;
+
+            if(isInAir)
+            {
+                playerLocomotion.inAirTimer = playerLocomotion.inAirTimer + Time.deltaTime;
+            }
         }
     }
 }
