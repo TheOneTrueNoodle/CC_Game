@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -176,9 +176,9 @@ MonoBehaviour:
   pivotSpeed: 0.03
   minimumPivot: -35
   maximumPivot: 35
-  cameraSphereRadius: 0
-  cameraCollisionOffset: 0
-  minimumCollisionOffset: 0
+  cameraSphereRadius: 0.3
+  cameraCollisionOffset: 0.3
+  minimumCollisionOffset: 0.2
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -668,12 +668,13 @@ MonoBehaviour:
   minimumDistanceNeededToBeginFall: 1
   groundDirectionRayDistance: 0.2
   inAirTimer: 0
+  jumpTimer: 0
   movementSpeed: 5
   sprintSpeed: 7.5
   dodgeSpeed: 16
   rotationSpeed: 10
-  fallingSpeed: 25
-  jumpPower: 200
+  fallingSpeed: 1
+  jumpPower: 300
   normalVector: {x: 0, y: 0, z: 0}
 --- !u!114 &1922733781
 MonoBehaviour:

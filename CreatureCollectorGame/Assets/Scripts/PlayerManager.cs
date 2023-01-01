@@ -37,6 +37,7 @@ namespace player
 
             //Player Locomotion
             inputHandler.TickInput(delta);
+            playerLocomotion.moveDirection = Vector3.zero;
             playerLocomotion.HandleMovement(delta);
             playerLocomotion.DodgeMovement(playerLocomotion.dodgeDir, delta);
             playerLocomotion.HandleDodge(delta);

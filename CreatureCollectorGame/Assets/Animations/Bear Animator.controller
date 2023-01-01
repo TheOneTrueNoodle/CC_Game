@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4a5679d0b89bba459f53849cbe02a57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCombatLocomotion: {fileID: 0}
+  playerLocomotion: {fileID: 0}
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 426b7d350eaacb9448c475b320d12e75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCombatLocomotion: {fileID: 0}
+  playerLocomotion: {fileID: 0}
 --- !u!206 &2946761286989211695
 BlendTree:
   m_ObjectHideFlags: 1
