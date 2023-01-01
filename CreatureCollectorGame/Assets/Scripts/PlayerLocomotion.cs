@@ -6,6 +6,7 @@ namespace player
 {
     public class PlayerLocomotion : MonoBehaviour
     {
+        private PlayerManager playerManager;
         private Transform cameraObject;
         private InputHandler inputHandler;
         private Vector3 moveDirection;
@@ -16,42 +17,24 @@ namespace player
         public new Rigidbody rigidbody;
         public GameObject normalCamera;
 
-        private bool grounded;
-        public Transform groundCheck;
-        private float groundDistance = 0.4f;
-        public LayerMask groundMask;
-
         public bool dodging;
-        private Vector3 dodgeDir;
+        [HideInInspector] public Vector3 dodgeDir;
 
-        public bool isSprinting;
-
-        [Header("Stats")]
+        [Header("Movement Stats")]
         [SerializeField] private float movementSpeed = 5;
         [SerializeField] private float sprintSpeed = 7.5f;
         [SerializeField] public float dodgeSpeed = 16;
         [SerializeField] private float rotationSpeed = 10;
-        [SerializeField] private float jumpHeight = 5;
 
         private void Start()
         {
+            playerManager = GetComponent<PlayerManager>();
             rigidbody = GetComponent<Rigidbody>();
             inputHandler = GetComponent<InputHandler>();
             animatorHandler = GetComponentInChildren<AnimatorHandler>();
             cameraObject = Camera.main.transform;
             myTransform = transform;
             animatorHandler.Initialize();
-        }
-
-        public void Update()
-        {
-            float delta = Time.deltaTime;
-
-            isSprinting = inputHandler.sprintFlag;
-            inputHandler.TickInput(delta);
-            HandleMovement(delta);
-            DodgeMovement(dodgeDir, delta);
-            HandleDodge(delta);
         }
 
         #region Movement
@@ -85,7 +68,7 @@ namespace player
 
         public void HandleMovement(float delta)
         {
-            if (inputHandler.isInteracting)
+            if (playerManager.isInteracting)
                 return;
 
             moveDirection = cameraObject.forward * inputHandler.vertical;
@@ -98,7 +81,7 @@ namespace player
             if(inputHandler.sprintFlag)
             {
                 speed = sprintSpeed;
-                isSprinting = true;
+                playerManager.isSprinting = true;
                 moveDirection *= speed;
             }
             else
@@ -109,7 +92,7 @@ namespace player
             Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, normalVector);
             rigidbody.velocity = projectedVelocity;
 
-            animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, isSprinting);
+            animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, playerManager.isSprinting);
 
             if (animatorHandler.canRotate)
             {
@@ -181,15 +164,7 @@ namespace player
 
         #region Jump
 
-        private void Jump()
-        {
-            if (grounded == true)
-            {
-                grounded = false;
-                Debug.Log("Jump Successful");
-                rigidbody.AddForce(transform.up * jumpHeight);
-            }
-        }
+
 
         #endregion
     }

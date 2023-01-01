@@ -18,31 +18,13 @@ namespace player
         public bool dodgeFlag;
         public bool sprintFlag;
         public bool jumpFlag;
-        public bool isInteracting;
 
         private PlayerControls inputActions;
-        public CameraHandler cameraHandler;
 
         private Vector2 movementInput;
         private Vector2 cameraInput;
 
         private bool jumpTrigger;
-
-        private void Start()
-        {
-            cameraHandler = CameraHandler.singleton;
-        }
-
-        private void FixedUpdate()
-        {
-            float delta = Time.fixedDeltaTime;
-
-            if(cameraHandler != null)
-            {
-                cameraHandler.followTarget(delta);
-                cameraHandler.HandleCameraRotation(delta, mouseX, mouseY);
-            }
-        }
 
         public void OnEnable()
         {
@@ -65,7 +47,7 @@ namespace player
         public void TickInput(float delta)
         {
             MoveInput(delta);
-            if (inCombat) { HandleDodgeInput(delta); }
+            HandleDodgeInput(delta);
             HandleSprintInput(delta);
         }
 
@@ -90,11 +72,17 @@ namespace player
 
         private void HandleDodgeInput(float delta)
         {
+            if (inCombat != true)
+                return;
+
             dodgeFlag = inputActions.PlayerCombatActions.Dodge.phase == UnityEngine.InputSystem.InputActionPhase.Performed;
         }
 
         private void HandleSprintInput(float delta)
         {
+            if (inCombat)
+                return;
+
             sprintFlag = inputActions.PlayerMovement.Sprint.phase == UnityEngine.InputSystem.InputActionPhase.Performed;
         }
     }
