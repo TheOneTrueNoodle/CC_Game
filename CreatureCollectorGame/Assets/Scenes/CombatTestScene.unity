@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 186691413}
   - component: {fileID: 186691412}
   - component: {fileID: 186691411}
-  - component: {fileID: 186691414}
+  - component: {fileID: 186691416}
   - component: {fileID: 186691415}
   m_Layer: 10
   m_Name: Player
@@ -173,6 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e91538614164df4dbbf387c7215b203, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inCombat: 1
   horizontal: 0
   vertical: 0
   moveAmount: 0
@@ -212,7 +213,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &186691414
+--- !u!114 &186691415
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -221,7 +222,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 186691408}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67f06b074ea822b4a942c0bb6dca3d99, type: 3}
+  m_Script: {fileID: 11500000, guid: 5c264bb489cf2864a8e74833c315de45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &186691416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186691408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c215a791b2fa920469392eaf5a4682db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   myTransform: {fileID: 0}
@@ -238,18 +251,6 @@ MonoBehaviour:
   rotationSpeed: 10
   jumpHeight: 5
   normalVector: {x: 0, y: 0, z: 0}
---- !u!114 &186691415
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 186691408}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c264bb489cf2864a8e74833c315de45, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &336459158
 GameObject:
   m_ObjectHideFlags: 0
@@ -929,7 +930,6 @@ MonoBehaviour:
   anim: {fileID: 0}
   inputHandler: {fileID: 0}
   playerLocomotion: {fileID: 0}
-  playerCombatLocomotion: {fileID: 0}
   canRotate: 1
 --- !u!1 &812861314
 GameObject:

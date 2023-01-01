@@ -9,7 +9,6 @@ namespace player
         public Animator anim;
         public InputHandler inputHandler;
         public PlayerLocomotion playerLocomotion;
-        public PlayerCombatLocomotion playerCombatLocomotion;
         private int vertical;
         private int horizontal;
         public bool canRotate;
@@ -18,9 +17,7 @@ namespace player
         {
             anim = GetComponent<Animator>();
             inputHandler = GetComponentInParent<InputHandler>();
-
-            if(GetComponentInParent<PlayerLocomotion>() == null) { playerCombatLocomotion = GetComponentInParent<PlayerCombatLocomotion>(); }
-            else { playerLocomotion = GetComponentInParent<PlayerLocomotion>(); }
+            playerLocomotion = GetComponentInParent<PlayerLocomotion>();
 
             vertical = Animator.StringToHash("Vertical");
             horizontal = Animator.StringToHash("Horizontal");

@@ -7,6 +7,8 @@ namespace player
 {
     public class InputHandler : MonoBehaviour
     {
+        public bool inCombat;
+
         public float horizontal;
         public float vertical;
         public float moveAmount;
@@ -62,7 +64,7 @@ namespace player
         public void TickInput(float delta)
         {
             MoveInput(delta);
-            HandleDodgeInput(delta);
+            if (inCombat) { HandleDodgeInput(delta); }
         }
 
         private void MoveInput(float delta)

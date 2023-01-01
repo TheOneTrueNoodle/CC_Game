@@ -576,6 +576,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
+  inputHandler: {fileID: 0}
+  playerLocomotion: {fileID: 0}
   canRotate: 1
 --- !u!1 &1922733776
 GameObject:
@@ -664,9 +666,12 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 64
+  dodging: 0
   movementSpeed: 5
+  dodgeSpeed: 10
   rotationSpeed: 10
   jumpHeight: 5
+  normalVector: {x: 0, y: 0, z: 0}
 --- !u!114 &1922733781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -679,11 +684,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e91538614164df4dbbf387c7215b203, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inCombat: 0
   horizontal: 0
   vertical: 0
   moveAmount: 0
   mouseX: 0
   mouseY: 0
+  b_Input: 0
+  dodgeFlag: 0
+  isInteracting: 0
+  cameraHandler: {fileID: 0}
 --- !u!1 &2079128986
 GameObject:
   m_ObjectHideFlags: 0

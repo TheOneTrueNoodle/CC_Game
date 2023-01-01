@@ -21,11 +21,14 @@ namespace player
         private float groundDistance = 0.4f;
         public LayerMask groundMask;
 
+        public bool dodging;
+        private Vector3 dodgeDir;
+
         [Header("Stats")]
         [SerializeField] private float movementSpeed = 5;
+        [SerializeField] public float dodgeSpeed = 10;
         [SerializeField] private float rotationSpeed = 10;
         [SerializeField] private float jumpHeight = 5;
-
 
         private void Start()
         {
@@ -42,6 +45,9 @@ namespace player
             float delta = Time.deltaTime;
 
             inputHandler.TickInput(delta);
+            if (dodging != true) { HandleMovement(delta); }
+            else { DodgeMovement(dodgeDir, delta); }
+            HandleDodge(delta);
 
             grounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
@@ -49,10 +55,43 @@ namespace player
             {
                 Jump();
             }
+        }
+
+        #region Movement
+
+        public Vector3 normalVector;
+        private Vector3 targetPosition;
+
+        private void HandleRotation(float delta)
+        {
+            Vector3 targetDirection = Vector3.zero;
+            float moveOverride = inputHandler.moveAmount;
+
+            targetDirection = cameraObject.forward * inputHandler.vertical;
+            targetDirection += cameraObject.right * inputHandler.horizontal;
+
+            targetDirection.Normalize();
+            targetDirection.y = 0;
+
+            if (targetDirection == Vector3.zero)
+            {
+                targetDirection = myTransform.forward;
+            }
+
+            float rs = rotationSpeed;
+
+            Quaternion tr = Quaternion.LookRotation(targetDirection);
+            Quaternion targetRotation = Quaternion.Slerp(myTransform.rotation, tr, rs * delta);
+
+            myTransform.rotation = targetRotation;
+        }
+
+        public void HandleMovement(float delta)
+        {
             moveDirection = cameraObject.forward * inputHandler.vertical;
             moveDirection += cameraObject.right * inputHandler.horizontal;
             moveDirection.Normalize();
-            if (grounded) { moveDirection.y = 0; }
+            moveDirection.y = 0;
 
             float speed = movementSpeed;
             moveDirection *= speed;
@@ -68,32 +107,61 @@ namespace player
             }
         }
 
-        #region Movement
-
-        private Vector3 normalVector;
-        private Vector3 targetPosition;
-        private void HandleRotation(float delta)
+        public void HandleDodge(float delta)
         {
-            Vector3 targetDirection = Vector3.zero;
-            float moveOverride = inputHandler.moveAmount;
+            if (animatorHandler.anim.GetBool("isInteracting"))
+                return;
 
-            targetDirection = cameraObject.forward * inputHandler.vertical;
-            targetDirection += cameraObject.right * inputHandler.horizontal;
-
-            targetDirection.Normalize();
-            targetDirection.y = 0;
-
-            if(targetDirection == Vector3.zero)
+            if (inputHandler.dodgeFlag)
             {
-                targetDirection = myTransform.forward;
+                moveDirection = cameraObject.forward * inputHandler.vertical;
+                moveDirection += cameraObject.right * inputHandler.horizontal;
+                moveDirection.Normalize();
+                moveDirection.y = 0;
+
+                if (inputHandler.moveAmount > 0)
+                {
+                    DodgeMovement dm = animatorHandler.anim.GetBehaviour<DodgeMovement>();
+                    if (dm.playerLocomotion == null) { dm.playerLocomotion = this; }
+                    //dm.dir = moveDirection;
+
+                    animatorHandler.PlayTargetAnimation("Dodge", true);
+                    Quaternion dodgeRotation = Quaternion.LookRotation(moveDirection);
+                    myTransform.rotation = dodgeRotation;
+                    dodgeDir = moveDirection;
+                }
+                else
+                {
+                    BackstepMovement bm = animatorHandler.anim.GetBehaviour<BackstepMovement>();
+                    if (bm.playerLocomotion == null) { bm.playerLocomotion = this; }
+                    //bm.dir = myTransform.forward; 
+
+                    animatorHandler.PlayTargetAnimation("Backstep", true);
+                    dodgeDir = -myTransform.forward;
+                }
             }
+        }
 
-            float rs = rotationSpeed;
+        public void DodgeMovement(Vector3 dir, float delta)
+        {
+            dir.Normalize();
+            Debug.Log(dir);
 
-            Quaternion tr = Quaternion.LookRotation(targetDirection);
-            Quaternion targetRotation = Quaternion.Slerp(myTransform.rotation, tr, rs * delta);
+            float speed = dodgeSpeed;
+            dir *= speed;
 
-            myTransform.rotation = targetRotation;
+
+            Vector3 projectedVelocity = Vector3.ProjectOnPlane(dir, normalVector);
+
+            Debug.Log(projectedVelocity);
+            Debug.Log(Vector3.back);
+            rigidbody.velocity = Vector3.zero;
+            rigidbody.velocity = projectedVelocity;
+        }
+
+        public void HandleSprinting(float delta)
+        {
+
         }
 
         #endregion

@@ -5,13 +5,13 @@ using player;
 
 public class DodgeMovement : StateMachineBehaviour
 {
-    public PlayerCombatLocomotion playerCombatLocomotion;
+    public PlayerLocomotion playerLocomotion;
     //public Vector3 dir;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        playerCombatLocomotion.dodging = true;
+        playerLocomotion.dodging = true;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -24,7 +24,7 @@ public class DodgeMovement : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        playerCombatLocomotion.dodging = false;
+        playerLocomotion.dodging = false;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
