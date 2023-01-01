@@ -197,7 +197,6 @@ namespace player
                 if (playerManager.isSprinting) 
                 {
                     speed = sprintSpeed;
-                    jump += jumpPower * 1.2f;
                 }
 
                 Debug.Log(speed);

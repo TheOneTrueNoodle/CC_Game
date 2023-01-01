@@ -56,13 +56,13 @@ namespace player
             Vector3 rotation = Vector3.zero;
             rotation.y = lookAngle;
             Quaternion targetRotation = Quaternion.Euler(rotation);
-            myTransform.rotation = targetRotation;
+            myTransform.rotation = Quaternion.Slerp(myTransform.rotation, targetRotation, lookSpeed);
 
             rotation = Vector3.zero;
             rotation.x = pivotAngle;
 
             targetRotation = Quaternion.Euler(rotation);
-            cameraPivotTransform.localRotation = targetRotation;
+            cameraPivotTransform.localRotation = Quaternion.Slerp(cameraPivotTransform.localRotation, targetRotation, pivotSpeed);
         }
 
         private void HandleCameraCollisions(float delta)
@@ -76,15 +76,15 @@ namespace player
             {
                 float dis = Vector3.Distance(cameraPivotTransform.position, hit.point);
                 targetPosition = -(dis - cameraCollisionOffset);
-
-                if(Mathf.Abs(targetPosition) < minimumCollisionOffset)
-                {
-                    targetPosition = -minimumCollisionOffset;
-                }
-
-                cameraTransformPosition.z = Mathf.Lerp(cameraTransform.localPosition.z, targetPosition, delta / 0.2f);
-                cameraTransform.localPosition = cameraTransformPosition;
             }
+
+            if (Mathf.Abs(targetPosition) < minimumCollisionOffset)
+            {
+                targetPosition = -minimumCollisionOffset;
+            }
+
+            cameraTransformPosition.z = Mathf.Lerp(cameraTransform.localPosition.z, targetPosition, delta / 0.2f);
+             cameraTransform.localPosition = cameraTransformPosition;
         }
     }
 }

@@ -178,7 +178,7 @@ MonoBehaviour:
   maximumPivot: 35
   cameraSphereRadius: 0.3
   cameraCollisionOffset: 0.3
-  minimumCollisionOffset: 0.2
+  minimumCollisionOffset: 0.3
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

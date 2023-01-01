@@ -76,7 +76,7 @@ namespace player
             }
             #endregion
 
-            if (isSprinting) 
+            if (isSprinting && (v != 0 || h != 0)) 
             { 
                 v = 2;
                 h = horizontalMovement;
