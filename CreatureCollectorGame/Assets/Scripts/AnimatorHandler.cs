@@ -16,10 +16,10 @@ namespace player
 
         public void Initialize()
         {
-            playerManager = GetComponentInParent<PlayerManager>();
-            anim = GetComponent<Animator>();
-            inputHandler = GetComponentInParent<InputHandler>();
-            playerLocomotion = GetComponentInParent<PlayerLocomotion>();
+            if (playerManager != null) { playerManager = GetComponentInParent<PlayerManager>(); }
+            anim = GetComponentInChildren<Animator>();
+            if (inputHandler != null) { inputHandler = GetComponentInParent<InputHandler>(); }
+            if (playerLocomotion != null) { playerLocomotion = GetComponentInParent<PlayerLocomotion>(); }
 
             vertical = Animator.StringToHash("Vertical");
             horizontal = Animator.StringToHash("Horizontal");
@@ -109,29 +109,11 @@ namespace player
                 return;
 
             float delta = Time.deltaTime;
+        }
 
-            /*
-            if(playerLocomotion == null)
-            {
-                playerCombatLocomotion.rigidbody.drag = 0;
-            }
-            else
-            {
-                playerLocomotion.rigidbody.drag = 0;
-            }
-
-            Vector3 deltaPosition = anim.deltaPosition;
-            deltaPosition.y = 0;
-            Vector3 velocity = deltaPosition / delta; 
-            
-            if (playerLocomotion == null)
-            {
-                playerCombatLocomotion.rigidbody.velocity = velocity;
-            }
-            else
-            {
-                playerLocomotion.rigidbody.velocity = velocity;
-            }*/
+        public void OnSpiritChange()
+        {
+            Initialize();
         }
     }
 }
