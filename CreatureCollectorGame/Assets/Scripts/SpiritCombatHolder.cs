@@ -25,7 +25,7 @@ namespace creature
             }
         }
 
-        public void LoadSpiritModel(SummonedSpirit summonedSpirit)
+        public void LoadSpiritModel(ActiveCreature summonedSpirit)
         {
             UnloadSpiritAndDestroy();
 

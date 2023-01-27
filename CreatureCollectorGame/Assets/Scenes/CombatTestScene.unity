@@ -225,6 +225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c264bb489cf2864a8e74833c315de45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim: {fileID: 0}
   isInteracting: 0
   isSprinting: 0
   isGrounded: 0
@@ -273,9 +274,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a8779d8e6052824a82578242c446787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeSpiritOne: {fileID: 11400000, guid: 29213d18aa969d44a9b6b6f1d7419fe1, type: 2}
-  activeSpiritTwo: {fileID: 0}
-  activeSpiritThree: {fileID: 0}
+  spiritInventory: {fileID: 11400000, guid: 7fa708ccd9e294e469c4197c27e3c139, type: 2}
+  activeSpiritOne:
+    BaseCreature: {fileID: 0}
+    nickname: 
+    Level: 0
+    HPBonus: 0
+    speedBonus: 0
+    dodgeCountBonus: 0
+  activeSpiritTwo:
+    BaseCreature: {fileID: 0}
+    nickname: 
+    Level: 0
+    HPBonus: 0
+    speedBonus: 0
+    dodgeCountBonus: 0
+  activeSpiritThree:
+    BaseCreature: {fileID: 0}
+    nickname: 
+    Level: 0
+    HPBonus: 0
+    speedBonus: 0
+    dodgeCountBonus: 0
 --- !u!1 &336459158
 GameObject:
   m_ObjectHideFlags: 0

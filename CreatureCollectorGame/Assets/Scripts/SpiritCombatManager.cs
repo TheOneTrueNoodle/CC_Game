@@ -15,7 +15,7 @@ namespace creature
             spiritCombatHolder = GetComponentInChildren<SpiritCombatHolder>();
             animatorHandler = GetComponent<AnimatorHandler>();
         }
-        public void LoadSpirit(SummonedSpirit spirit)
+        public void LoadSpirit(ActiveCreature spirit)
         {
             spiritCombatHolder.LoadSpiritModel(spirit);
             animatorHandler.Initialize();

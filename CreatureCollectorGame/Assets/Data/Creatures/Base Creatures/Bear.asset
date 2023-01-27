@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Bear
   m_EditorClassIdentifier: 
   creatureIcon: {fileID: 0}
-  creatureName: Bear
   modelPrefab: {fileID: 8413688642340979888, guid: efbf0e61c490d7a4595acd1e9ec6e11b, type: 3}
-  baseHP: 0
-  baseSpeed: 0
-  baseDodgeCount: 0
+  creatureName: Bear
+  description: A bear mixed with the innate powers of mother nature.
+  baseHP: 200
+  baseSpeed: 8
+  baseDodgeCount: 2
