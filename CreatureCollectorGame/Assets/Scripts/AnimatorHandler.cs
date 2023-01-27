@@ -16,8 +16,9 @@ namespace player
 
         public void Initialize()
         {
-            if (playerManager != null) { playerManager = GetComponentInParent<PlayerManager>(); }
+            if (playerManager == null) { playerManager = GetComponentInParent<PlayerManager>(); }
             anim = GetComponentInChildren<Animator>();
+            playerManager.anim = anim;
             if (inputHandler != null) { inputHandler = GetComponentInParent<InputHandler>(); }
             if (playerLocomotion != null) { playerLocomotion = GetComponentInParent<PlayerLocomotion>(); }
 
@@ -88,7 +89,6 @@ namespace player
 
         public void PlayTargetAnimation(string targetAnim, bool isInteracting)
         {
-            anim.applyRootMotion = isInteracting;
             anim.SetBool("isInteracting", isInteracting);
             anim.CrossFade(targetAnim, 0.2f);
         }

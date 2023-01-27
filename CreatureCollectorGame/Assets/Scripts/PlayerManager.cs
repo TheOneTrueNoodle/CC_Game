@@ -7,7 +7,7 @@ namespace player
     public class PlayerManager : MonoBehaviour
     {
         InputHandler inputHandler;
-        Animator anim;
+        public Animator anim;
         CameraHandler cameraHandler;
         PlayerLocomotion playerLocomotion;
 

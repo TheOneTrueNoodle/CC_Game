@@ -785,6 +785,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c264bb489cf2864a8e74833c315de45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim: {fileID: 0}
   isInteracting: 0
   isSprinting: 0
   isGrounded: 0
